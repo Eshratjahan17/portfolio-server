@@ -22,6 +22,22 @@ async function run(){
      await client.connect();
       const projectsCollection = client.db("portfolio").collection("projects");
 
+      //all data
+          app.get("/projects", async (req, res) => {
+            const q = req.query;
+            console.log(q);
+            const cursor = projectsCollection.find(q);
+            const result = await cursor.toArray();
+            res.send(result);
+          });
+          //data by id
+          app.get("/projects/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const project = await projectsCollection.findOne(query);
+            res.send(project);
+          });
+
   }
   finally{
 
